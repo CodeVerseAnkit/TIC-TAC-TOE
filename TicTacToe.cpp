@@ -1,4 +1,6 @@
 #include <iostream>
+#include <vector>
+#include <ctime>
 #include "/sdcard/Coding.Cpp/PROJECT/Tic Tac Toe/HelperFunction.h"
 using namespace std;
 /*  <-------- TIC TAC TOE -------->
@@ -29,10 +31,32 @@ void menu()
 
     cout << "  _-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_\n\n";
 }
+// some function declaration 
+void print_board(vector<char>spaces) ;
+char select_symbol() ;
+
 // ---> 1. How To Play
 void how_to_play()
 {
-    cout << "\n\n  This feature is under construction👩‍💻" << endl;
+     print_text_with_animation("\n\t<-------- \033[1;32;4mTIC TAC TOE\033[0m -------->", 50);
+     cout<<"\n\n\033[1;33m";
+     print_center("WELCOME TO TIC TAC TOE");
+     cout<<"\033[0m";
+     
+     print_center ("------------------------");
+     cout<<"\n\n";
+     cout<<"  \033[1mTIC TAC TOE :-\033[0m\n  -----------\n"<<endl;
+    cout<<"  Tic-tac-toe (also known as noughts and\n  crosses or Xs and Os) is a classic two-\n  player strategy game played on a grid.\n  One player marks spaces with X and \n  the other with O.\n"<<endl;
+    vector<char> space={'1','2','3','4','5','6','7','8','9'};
+    print_board(space) ;
+    cout<<"\n\n";
+    cout<<"  \033[1mHow to Play :-\033[0m\n  ------------\n"<<endl;
+cout<<" 1.OBJECTIVE : Be the first to align three of\n   your symbols horizontally,vertically,\n   or diagonally.\n";
+cout<<" 2.TURNS : Players take turns placing their\n   mark in an empty square.\n";
+cout<<" 3.END GAME : The game ends when one player\n   wins or all nine squares are filled. If\n   no one has three in a row, it's a tie\n   (often called a \"cat's game\").\n"<<endl ;
+cout<<"  \033[1mNote :-\033[0m\n  -----\n"<<endl;
+cout<<"  Enter (1-9) number to place your symbol\n  in the square on the board.\n"<<endl;
+cout<<"  \033[1;33mEnjoy\033[0m✌\n"<<endl;
     back_button();
 }
 // ---> 2. Score
@@ -50,7 +74,15 @@ void play_with_bot()
 // ---> 4. Play With Friend
 void play_with_friend()
 {
-    cout << "\n\n  This feature is under construction👩‍💻" << endl;
+    //loading_bar() ;
+     cout<<"\n\t  ❌\033[1;33m";
+     cout<<"WELCOME TO TIC TAC TOE";
+     cout<<"\033[0m⭕\n";
+     
+     cout<<"\t  --------------------------\n"<<endl;
+     
+char player1=select_symbol() ;
+char player2=(player1=='O')? 'X':'O';cout<<"\n  Player1: "<<player1<<"\n  Player2: " <<player2<<endl;
     back_button();
 }
 // ---> 5. Play Online
@@ -118,7 +150,13 @@ char user_input()
 }
 int main()
 {
-    char input;
+   
+   play_with_friend() ;
+   
+  // how_to_play() ;
+   
+   
+   /* char input;
     do
     {
         menu();
@@ -154,4 +192,24 @@ int main()
             clear_screen();
     } while (input != '7');
     return 0;
+    */
+   
+}
+void print_board(vector<char>space) {
+
+
+cout<<"\033[1m\t"<<string(25,'-')<<"\n\t|       |       |       |\n\t|   "<<space[0]<<"   |   "<<space[1]<<"   |   "<<space[2]<<"   |\n\t|       |       |       |\n\t"<<string(25,'-')<<"\n\t|       |       |       |\n\t|   "<<space[3]<<"   |   "<<space[4]<<"   |   "<<space[5]<<"   |\n\t|       |       |       |\n\t"<<string(25,'-')<<"\n\t|       |       |       |\n\t|   "<<space[6]<<"   |   "<<space[7]<<"   |   "<<space[8]<<"   |\n\t|       |       |       |\n\t"<<string(25,'-')<<"\033[0m";
+    
+}
+char select_symbol() {
+ char s;
+ while(true) {
+     cout<<"  Choose your symbol (X/O): ";
+     cin>>s;
+     s=toupper(s) ; 
+     if(s=='O'||s=='X')
+     break;
+     
+ }
+       return s;
 }
