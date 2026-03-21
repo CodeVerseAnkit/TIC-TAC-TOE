@@ -31,33 +31,42 @@ void menu()
 
     cout << "  _-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_\n\n";
 }
-// some function declaration 
-void print_board(vector<char>space) ;
-char select_symbol() ;
-int player_move(vector<char>space);
-int computer_move(vector<char>space) ;
+// some function declaration
+void print_board(vector<char> &space);
+char select_symbol();
+void player_move(vector<char> &space, char player, int turn);
+void computer_move(vector<char> &space, char computer);
+int check_winner(vector<char> &space, char player1, char player2);
+bool check_draw(vector<char> &space);
 // ---> 1. How To Play
 void how_to_play()
 {
-     print_text_with_animation("\n\t<-------- \033[1;32;4mTIC TAC TOE\033[0m -------->", 50);
-     cout<<"\n\n\033[1;33m";
-     print_center("WELCOME TO TIC TAC TOE");
-     cout<<"\033[0m";
-     
-     print_center ("------------------------");
-     cout<<"\n\n";
-     cout<<"  \033[1mTIC TAC TOE :-\033[0m\n  -----------\n"<<endl;
-    cout<<"  Tic-tac-toe (also known as noughts and\n  crosses or Xs and Os) is a classic two-\n  player strategy game played on a grid.\n  One player marks spaces with X and \n  the other with O.\n"<<endl;
-    vector<char> space={'1','2','3','4','5','6','7','8','9'};
-    print_board(space) ;
-    cout<<"\n\n";
-    cout<<"  \033[1mHow to Play :-\033[0m\n  ------------\n"<<endl;
-cout<<" 1.OBJECTIVE : Be the first to align three of\n   your symbols horizontally,vertically,\n   or diagonally.\n";
-cout<<" 2.TURNS : Players take turns placing their\n   mark in an empty square.\n";
-cout<<" 3.END GAME : The game ends when one player\n   wins or all nine squares are filled. If\n   no one has three in a row, it's a tie\n   (often called a \"cat's game\").\n"<<endl ;
-cout<<"  \033[1mNote :-\033[0m\n  -----\n"<<endl;
-cout<<"  Enter (1-9) number to place your symbol\n  in the square on the board.\n"<<endl;
-cout<<"  \033[1;33mEnjoy\033[0m✌\n"<<endl;
+    print_text_with_animation("\n\t<-------- \033[1;32;4mTIC TAC TOE\033[0m -------->", 50);
+    cout << "\n\n\033[1;33m";
+    print_center("WELCOME TO TIC TAC TOE");
+    cout << "\033[0m";
+
+    print_center("------------------------");
+    cout << "\n\n";
+    cout << "  \033[1mTIC TAC TOE :-\033[0m\n  -----------\n"
+         << endl;
+    cout << "  Tic-tac-toe (also known as noughts and\n  crosses or Xs and Os) is a classic two-\n  player strategy game played on a grid.\n  One player marks spaces with X and \n  the other with O.\n"
+         << endl;
+    vector<char> space = {'1', '2', '3', '4', '5', '6', '7', '8', '9'};
+    print_board(space);
+    cout << "\n\n";
+    cout << "  \033[1mHow to Play :-\033[0m\n  ------------\n"
+         << endl;
+    cout << " 1.OBJECTIVE : Be the first to align three of\n   your symbols horizontally,vertically,\n   or diagonally.\n";
+    cout << " 2.TURNS : Players take turns placing their\n   mark in an empty square.\n";
+    cout << " 3.END GAME : The game ends when one player\n   wins or all nine squares are filled. If\n   no one has three in a row, it's a tie\n   (often called a \"cat's game\").\n"
+         << endl;
+    cout << "  \033[1mNote :-\033[0m\n  -----\n"
+         << endl;
+    cout << "  Enter (1-9) number to place your symbol\n  in the square on the board.\n"
+         << endl;
+    cout << "  \033[1;33mEnjoy\033[0m✌\n"
+         << endl;
     back_button();
 }
 // ---> 2. Score
@@ -76,16 +85,66 @@ void play_with_bot()
 void play_with_friend()
 {
     //loading_bar() ;
-     cout<<"\n\t  ❌\033[1;33m";
-     cout<<"WELCOME TO TIC TAC TOE";
-     cout<<"\033[0m⭕\n";
-     
-     cout<<"\t  --------------------------\n"<<endl;
- vector<char>space(9, ' ') ;  
-char player1=select_symbol() ;
-char player2=(player1=='O')? 'X':'O';cout<<"\n  Player1: "<<player1<<"\n  Player2: " <<player2<<endl<<endl;
-print_board(space) ;
+    cout << "\n\t  ❌\033[1;33m";
+    cout << "WELCOME TO TIC TAC TOE";
+    cout << "\033[0m⭕\n";
 
+    cout << "\t  --------------------------\n"
+         << endl;
+    char user;
+    do
+    {
+        vector<char> space(9, ' ');
+        char player1 = select_symbol();
+        char player2 = (player1 == 'O') ? 'X' : 'O';
+        cout << "\n  Player1: " << player1 << "\n  Player2: " << player2 << endl
+             << endl;
+        loading_animation1("Loading Game");
+        clear_screen();
+        print_board(space);
+        while (true)
+        {
+            cout << "\n\n";
+            player_move(space, player1, 1);
+            clear_screen();
+
+            print_board(space);
+            if (check_winner(space, player1, player2))
+            {
+                string mssg = check_winner(space, player1, player2) == 1 ? "Player1 Win🥳🥳" : "Player2 Win🥳🥳";
+                cout << "\n\n  " << mssg << endl;
+                break;
+            }
+            if (check_draw(space))
+            {
+                cout << "\n\n  It's a draw⭕❌" << endl;
+                break;
+            }
+            cout << "\n\n";
+            player_move(space, player2, 2);
+            clear_screen();
+
+            print_board(space);
+            if (check_winner(space, player1, player2))
+            {
+                string mssg = check_winner(space, player1, player2) == 1 ? "Player1 Win🥳🥳" : "Player2 Win🥳🥳";
+                cout << "\n\n  " << mssg << endl;
+                break;
+            }
+            if (check_draw(space))
+            {
+                cout << "\n\n  It's a draw⭕❌" << endl;
+                break;
+            }
+        }
+        while (true)
+        {
+            cout << "  Do you want to play again(y/n): ";
+            cin >> user;
+            if (tolower(user) == 'y' || tolower(user) == 'n')
+                break;
+        }
+    } while (tolower(user) != 'n');
     back_button();
 }
 // ---> 5. Play Online
@@ -151,15 +210,14 @@ char user_input()
     }
     return input;
 }
+// main function
 int main()
 {
-   
-   play_with_friend() ;
-   
-  // how_to_play() ;
-   
-   
-   /* char input;
+    //  play_with_friend();
+
+    // how_to_play() ;
+
+    /* char input;
     do
     {
         menu();
@@ -191,51 +249,96 @@ int main()
             cout << "  Invalid Input ";
             break;
         }
-        if (input != '7')
+        if (input != '7'){
             clear_screen();
+            clear_screen() ;
+        }
     } while (input != '7');
     return 0;
-    */
-   
+   */
 }
-void print_board(vector<char>space) {
+// print_board()
+void print_board(vector<char> &space)
+{
+    cout << "\n\033[1m\t" << string(25, '-') << "\n\t|       |       |       |\n\t|   " << space[0] << "   |   " << space[1] << "   |   " << space[2] << "   |\n\t|       |       |       |\n\t" << string(25, '-') << "\n\t|       |       |       |\n\t|   " << space[3] << "   |   " << space[4] << "   |   " << space[5] << "   |\n\t|       |       |       |\n\t" << string(25, '-') << "\n\t|       |       |       |\n\t|   " << space[6] << "   |   " << space[7] << "   |   " << space[8] << "   |\n\t|       |       |       |\n\t" << string(25, '-') << "\033[0m";
+}
+// select_symbol()
+char select_symbol()
+{
+    char s;
+    while (true)
+    {
+        cout << "  Choose your symbol (X/O): ";
+        cin >> s;
+        s = toupper(s);
+        if (s == 'O' || s == 'X')
+            break;
+    }
+    return s;
+}
+// player_move()
+void player_move(vector<char> &space, char player, int turn)
+{
+    int move;
+    while (true)
+    {
+        cout << "  Player" << turn << " (turn): ";
+        cin >> move;
+        move--;
+        if (move >= 0 && move < 9 && space[move] == ' ')
+        {
+            space[move] = player;
+            break;
+        }
+        else
+            cout << "  Invalid move!! \n";
+    }
+}
+// computer_move()
+void computer_move(vector<char> &space, char computer)
+{
+    int move;
+    srand(time(0));
+    while (true)
+    {
+        move = rand() % 9 + 1;
+        move--;
+        if (move >= 0 && move < 9 && space[move] == ' ')
+        {
+            space[move] = computer;
+            break;
+        }
+    }
+}
+// check_winner()
+int check_winner(vector<char> &space, char player1, char player2)
+{
+    if (space[0] != ' ' && space[0] == space[1] && space[1] == space[2])
+        return (space[0] == player1) ? 1 : 2;
+    else if (space[3] != ' ' && space[3] == space[4] && space[4] == space[5])
+        return (space[3] == player1) ? 1 : 2;
+    else if (space[6] != ' ' && space[6] == space[7] && space[7] == space[8])
+        return (space[6] == player1) ? 1 : 2;
+    else if (space[0] != ' ' && space[0] == space[4] && space[4] == space[8])
+        return (space[0] == player1) ? 1 : 2;
+    else if (space[2] != ' ' && space[2] == space[4] && space[4] == space[6])
+        return (space[2] == player1) ? 1 : 2;
+    else if (space[0] != ' ' && space[0] == space[3] && space[3] == space[6])
+        return (space[0] == player1) ? 1 : 2;
+    else if (space[1] != ' ' && space[1] == space[4] && space[4] == space[7])
+        return (space[1] == player1) ? 1 : 2;
+    else if (space[2] != ' ' && space[2] == space[5] && space[5] == space[8])
+        return (space[2] == player1) ? 1 : 2;
 
-
-cout<<"\033[1m\t"<<string(25,'-')<<"\n\t|       |       |       |\n\t|   "<<space[0]<<"   |   "<<space[1]<<"   |   "<<space[2]<<"   |\n\t|       |       |       |\n\t"<<string(25,'-')<<"\n\t|       |       |       |\n\t|   "<<space[3]<<"   |   "<<space[4]<<"   |   "<<space[5]<<"   |\n\t|       |       |       |\n\t"<<string(25,'-')<<"\n\t|       |       |       |\n\t|   "<<space[6]<<"   |   "<<space[7]<<"   |   "<<space[8]<<"   |\n\t|       |       |       |\n\t"<<string(25,'-')<<"\033[0m";
-    
+    return 0;
 }
-char select_symbol() {
- char s;
- while(true) {
-     cout<<"  Choose your symbol (X/O): ";
-     cin>>s;
-     s=toupper(s) ; 
-     if(s=='O'||s=='X')
-     break;
-     
- }
-       return s;
-}
-int player_move(vector<char>space) {
-    
-  int move;
-  while(true) {
-   cout<<"  Player1 (turn): ";
-   cin>>move;
-  move--;if(move>=0&&move<9&&space[move]==' ')break;
-  else
-  cout<<"  Invalid move!! \n";
-  }
-  return move;
-}
-int computer_move(vector<char>space) {
-  int move;
-  srand(time(0) );
-  while(true) {
-  move=rand() %9+1;
-  move--;if(move>=0&&move<9&&space[move]==' ')break;
-  
-  
-  }
-  return move;
+// check_tie()
+bool check_draw(vector<char> &space)
+{
+    for (char c : space)
+    {
+        if (c == ' ')
+            return false;
+    }
+    return true;
 }

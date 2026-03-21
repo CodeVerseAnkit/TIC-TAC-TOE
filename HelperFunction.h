@@ -58,7 +58,7 @@ void loading_animation1(std::string text)
         std::cout << "   ";
 
         std::cout.flush();
-        std::this_thread::sleep_for(std::chrono::milliseconds(200)); // speed control
+        std::this_thread::sleep_for(std::chrono::milliseconds(100)); // speed control
     }
 
     std::cout << std::endl;
