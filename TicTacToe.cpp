@@ -32,9 +32,10 @@ void menu()
     cout << "  _-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_\n\n";
 }
 // some function declaration 
-void print_board(vector<char>spaces) ;
+void print_board(vector<char>space) ;
 char select_symbol() ;
-
+int player_move(vector<char>space);
+int computer_move(vector<char>space) ;
 // ---> 1. How To Play
 void how_to_play()
 {
@@ -80,9 +81,11 @@ void play_with_friend()
      cout<<"\033[0m⭕\n";
      
      cout<<"\t  --------------------------\n"<<endl;
-     
+ vector<char>space(9, ' ') ;  
 char player1=select_symbol() ;
-char player2=(player1=='O')? 'X':'O';cout<<"\n  Player1: "<<player1<<"\n  Player2: " <<player2<<endl;
+char player2=(player1=='O')? 'X':'O';cout<<"\n  Player1: "<<player1<<"\n  Player2: " <<player2<<endl<<endl;
+print_board(space) ;
+
     back_button();
 }
 // ---> 5. Play Online
@@ -212,4 +215,27 @@ char select_symbol() {
      
  }
        return s;
+}
+int player_move(vector<char>space) {
+    
+  int move;
+  while(true) {
+   cout<<"  Player1 (turn): ";
+   cin>>move;
+  move--;if(move>=0&&move<9&&space[move]==' ')break;
+  else
+  cout<<"  Invalid move!! \n";
+  }
+  return move;
+}
+int computer_move(vector<char>space) {
+  int move;
+  srand(time(0) );
+  while(true) {
+  move=rand() %9+1;
+  move--;if(move>=0&&move<9&&space[move]==' ')break;
+  
+  
+  }
+  return move;
 }
