@@ -91,6 +91,7 @@ void play_with_friend()
 
     cout << "\t  --------------------------\n"
          << endl;
+    int player1_score = 0, player2_score = 0, draw = 0;
     char user;
     do
     {
@@ -101,39 +102,45 @@ void play_with_friend()
              << endl;
         loading_animation1("Loading Game");
         clear_screen();
+        // current score
+        cout << "\n  \033[1;3mPlayer1 Win:\033[0m " << player1_score << "   \033[1;3mPlayer2 Win:\033[0m " << player2_score << "   \033[1;3mDraw:\033[0m " << draw << "\n\n";
         print_board(space);
         while (true)
         {
             cout << "\n\n";
             player_move(space, player1, 1);
             clear_screen();
-
+            cout << "\n  \033[1;3mPlayer1 Win:\033[0m " << player1_score << "   \033[1;3mPlayer2 Win:\033[0m " << player2_score << "   \033[1;3mDraw:\033[0m " << draw << "\n\n";
             print_board(space);
             if (check_winner(space, player1, player2))
             {
                 string mssg = check_winner(space, player1, player2) == 1 ? "Player1 Win🥳🥳" : "Player2 Win🥳🥳";
                 cout << "\n\n  " << mssg << endl;
+                check_winner(space, player1, player2) == 1 ? player1_score++ : player2_score++;
                 break;
             }
             if (check_draw(space))
             {
                 cout << "\n\n  It's a draw⭕❌" << endl;
+                draw++;
                 break;
             }
             cout << "\n\n";
             player_move(space, player2, 2);
             clear_screen();
-
+            cout << "\n  \033[1;3mPlayer1 Win:\033[0m " << player1_score << "   \033[1;3mPlayer2 Win:\033[0m " << player2_score << "   \033[1;3mDraw:\033[0m " << draw << "\n\n";
             print_board(space);
             if (check_winner(space, player1, player2))
             {
                 string mssg = check_winner(space, player1, player2) == 1 ? "Player1 Win🥳🥳" : "Player2 Win🥳🥳";
                 cout << "\n\n  " << mssg << endl;
+                check_winner(space, player1, player2) == 1 ? player1_score++ : player2_score++;
                 break;
             }
             if (check_draw(space))
             {
                 cout << "\n\n  It's a draw⭕❌" << endl;
+                draw++;
                 break;
             }
         }
@@ -145,6 +152,8 @@ void play_with_friend()
                 break;
         }
     } while (tolower(user) != 'n');
+    cout << "\n  \033[1;4mFinal Score\033[0m:- \n";
+    cout << "\n  \033[1;3mPlayer1 Win:\033[0m " << player1_score << "   \033[1;3mPlayer2 Win:\033[0m " << player2_score << "   \033[1;3mDraw:\033[0m " << draw << "\n\n";
     back_button();
 }
 // ---> 5. Play Online
@@ -213,7 +222,7 @@ char user_input()
 // main function
 int main()
 {
-    //  play_with_friend();
+    play_with_friend();
 
     // how_to_play() ;
 
