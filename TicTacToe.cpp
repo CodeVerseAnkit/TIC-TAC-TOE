@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <vector>
 #include <ctime>
 #include "/sdcard/Coding.Cpp/PROJECT/Tic Tac Toe/HelperFunction.h"
@@ -38,6 +39,7 @@ void player_move(vector<char> &space, char player, int turn);
 void computer_move(vector<char> &space, char computer);
 int check_winner(vector<char> &space, char player1, char player2);
 bool check_draw(vector<char> &space);
+void user_logs(string mssg);
 // ---> 1. How To Play
 void how_to_play()
 {
@@ -222,11 +224,9 @@ char user_input()
 // main function
 int main()
 {
-    play_with_friend();
+    //  play_with_friend();
 
-    // how_to_play() ;
-
-    /* char input;
+    char input;
     do
     {
         menu();
@@ -234,37 +234,44 @@ int main()
         switch (input)
         {
         case '1':
+            user_logs("Opened how to play");
             how_to_play();
             break;
         case '2':
+            user_logs("Opened score");
             score();
             break;
         case '3':
+            user_logs("Played game with bot");
             play_with_bot();
             break;
         case '4':
+            user_logs("Played game with friend");
             play_with_friend();
             break;
         case '5':
+            user_logs("Visited play online feature");
             play_online();
             break;
         case '6':
+            user_logs("Visited app info");
             app_info();
             break;
         case '7':
+            user_logs("Exit the app");
             exit();
             break;
         default:
             cout << "  Invalid Input ";
             break;
         }
-        if (input != '7'){
+        if (input != '7')
+        {
             clear_screen();
-            clear_screen() ;
+            clear_screen();
         }
     } while (input != '7');
     return 0;
-   */
 }
 // print_board()
 void print_board(vector<char> &space)
@@ -350,4 +357,23 @@ bool check_draw(vector<char> &space)
             return false;
     }
     return true;
+}
+// user_log()
+void user_logs(string mssg)
+{
+    // log file for store user logs for future use
+    ofstream ofs("/sdcard/Coding.cpp/PROJECT/Tic Tac Toe/UserLogs.txt", ios::app);
+    //cout<<ofs.is_open();
+    time_t now = time(nullptr);
+    tm *lt = localtime(&now);
+
+    char time[12];
+    char date[50];
+    strftime(time, sizeof(time), "%I:%M:%S %p", lt);
+
+    strftime(date, sizeof(date), "%A,%d,%B,%Y", lt);
+    ofs << mssg << ":\n"
+        << date << "  " << time << "\n"
+        << endl;
+    ofs.close();
 }
