@@ -39,7 +39,18 @@ void player_move(vector<char> &space, char player, int turn);
 void computer_move(vector<char> &space, char computer);
 int check_winner(vector<char> &space, char player1, char player2);
 bool check_draw(vector<char> &space);
+void welcome_mssg();
 void user_logs(string mssg);
+void display_score1(int p1, int p2, int d);
+void display_score2(int c, int p, int d);
+void save_score(int cs = 0, int ps = 0, int d1 = 0, int ps1 = 0, int ps2 = 0, int d2 = 0);
+// structure to save score
+struct game_score
+{
+    int computer_score = 0,
+        player_score = 0,
+        draw1 = 0, player_score1 = 0, player_score2 = 0, draw2 = 0;
+};
 // ---> 1. How To Play
 void how_to_play()
 {
@@ -74,7 +85,35 @@ void how_to_play()
 // ---> 2. Score
 void score()
 {
-    cout << "\n\n  This feature is under construction👩‍💻" << endl;
+    welcome_mssg();
+
+    cout << "\n        ------------------------------\n        |\033[1;46m     Computer Vs Player     \033[0m|\n        ------------------------------\n";
+    game_score s;
+    ifstream ifs("/sdcard/Coding.cpp/PROJECT/Tic Tac Toe/PlayerScore.txt");
+    ifs >> s.computer_score >> s.player_score >> s.draw1 >> s.player_score1 >> s.player_score2 >> s.draw2;
+    ifs.close();
+    display_score2(s.computer_score, s.player_score, s.draw1);
+    cout << "\n        ------------------------------\n        |\033[1;46m     Player1 Vs Player2     \033[0m|\n        ------------------------------\n";
+    display_score2(s.player_score1, s.player_score2, s.draw2);
+    cout << "\n        ------------------------------\n        |\033[1;46m     Total Games Played     \033[0m|\n        ------------------------------\n";
+    cout << "\n  \033[1;3mComputer Vs Player:\033[0m " << (s.computer_score + s.player_score + s.draw1) << "   \033[1;3mPlayer Vs Player:\033[0m " << (s.player_score1 + s.player_score2 + s.draw2) << "\n\n";
+    char user;
+    while (true)
+    {
+        cout << "  Do you want to reset score(y/n): ";
+        cin >> user;
+        user = tolower(user);
+        if (user == 'y' || user == 'n')
+            break;
+    }
+    if (user == 'y')
+    {
+        ofstream ofs("/sdcard/Coding.cpp/PROJECT/Tic Tac Toe/PlayerScore.txt");
+        ofs << 0 << " " << 0 << " " << 0 << " " << 0 << " " << 0 << " " << 0;
+        ifs.close();
+        loading_animation1(" Clearing Scoreboard");
+        cout << "  Score board Reset successfully 👍" << endl;
+    }
     back_button();
 }
 // ---> 3. Play With Bot
@@ -86,14 +125,9 @@ void play_with_bot()
 // ---> 4. Play With Friend
 void play_with_friend()
 {
-    //loading_bar() ;
-    cout << "\n\t  ❌\033[1;33m";
-    cout << "WELCOME TO TIC TAC TOE";
-    cout << "\033[0m⭕\n";
-
-    cout << "\t  --------------------------\n"
-         << endl;
-    int player1_score = 0, player2_score = 0, draw = 0;
+    loading_bar();
+    welcome_mssg();
+    game_score S;
     char user;
     do
     {
@@ -105,44 +139,44 @@ void play_with_friend()
         loading_animation1("Loading Game");
         clear_screen();
         // current score
-        cout << "\n  \033[1;3mPlayer1 Win:\033[0m " << player1_score << "   \033[1;3mPlayer2 Win:\033[0m " << player2_score << "   \033[1;3mDraw:\033[0m " << draw << "\n\n";
+        display_score1(S.player_score1, S.player_score2, S.draw2);
         print_board(space);
         while (true)
         {
             cout << "\n\n";
             player_move(space, player1, 1);
             clear_screen();
-            cout << "\n  \033[1;3mPlayer1 Win:\033[0m " << player1_score << "   \033[1;3mPlayer2 Win:\033[0m " << player2_score << "   \033[1;3mDraw:\033[0m " << draw << "\n\n";
+            display_score1(S.player_score1, S.player_score2, S.draw2);
             print_board(space);
             if (check_winner(space, player1, player2))
             {
                 string mssg = check_winner(space, player1, player2) == 1 ? "Player1 Win🥳🥳" : "Player2 Win🥳🥳";
                 cout << "\n\n  " << mssg << endl;
-                check_winner(space, player1, player2) == 1 ? player1_score++ : player2_score++;
+                check_winner(space, player1, player2) == 1 ? S.player_score1++ : S.player_score2++;
                 break;
             }
             if (check_draw(space))
             {
                 cout << "\n\n  It's a draw⭕❌" << endl;
-                draw++;
+                S.draw2++;
                 break;
             }
             cout << "\n\n";
             player_move(space, player2, 2);
             clear_screen();
-            cout << "\n  \033[1;3mPlayer1 Win:\033[0m " << player1_score << "   \033[1;3mPlayer2 Win:\033[0m " << player2_score << "   \033[1;3mDraw:\033[0m " << draw << "\n\n";
+            display_score1(S.player_score1, S.player_score2, S.draw2);
             print_board(space);
             if (check_winner(space, player1, player2))
             {
                 string mssg = check_winner(space, player1, player2) == 1 ? "Player1 Win🥳🥳" : "Player2 Win🥳🥳";
                 cout << "\n\n  " << mssg << endl;
-                check_winner(space, player1, player2) == 1 ? player1_score++ : player2_score++;
+                check_winner(space, player1, player2) == 1 ? S.player_score1++ : S.player_score2++;
                 break;
             }
             if (check_draw(space))
             {
                 cout << "\n\n  It's a draw⭕❌" << endl;
-                draw++;
+                S.draw2++;
                 break;
             }
         }
@@ -155,7 +189,8 @@ void play_with_friend()
         }
     } while (tolower(user) != 'n');
     cout << "\n  \033[1;4mFinal Score\033[0m:- \n";
-    cout << "\n  \033[1;3mPlayer1 Win:\033[0m " << player1_score << "   \033[1;3mPlayer2 Win:\033[0m " << player2_score << "   \033[1;3mDraw:\033[0m " << draw << "\n\n";
+    display_score1(S.player_score1, S.player_score2, S.draw2);
+    save_score(0, 0, 0, S.player_score1, S.player_score2, S.draw2);
     back_button();
 }
 // ---> 5. Play Online
@@ -225,7 +260,7 @@ char user_input()
 int main()
 {
     //  play_with_friend();
-
+    //score() ;
     char input;
     do
     {
@@ -271,6 +306,7 @@ int main()
             clear_screen();
         }
     } while (input != '7');
+
     return 0;
 }
 // print_board()
@@ -376,4 +412,41 @@ void user_logs(string mssg)
         << date << "  " << time << "\n"
         << endl;
     ofs.close();
+}
+// save(+update) score to .txt file
+void save_score(int cs, int ps, int d1, int ps1, int ps2, int d2)
+{
+    game_score s;
+    ifstream ifs("/sdcard/Coding.cpp/PROJECT/Tic Tac Toe/PlayerScore.txt");
+    ifs >> s.computer_score >> s.player_score >> s.draw1 >> s.player_score1 >> s.player_score2 >> s.draw2;
+    ifs.close();
+
+    s.computer_score += cs;
+    s.player_score += ps;
+    s.draw1 += d1;
+    s.player_score1 += ps1;
+    s.player_score2 += ps2;
+    s.draw2 += d2;
+    ofstream ofs("/sdcard/Coding.cpp/PROJECT/Tic Tac Toe/PlayerScore.txt");
+    ofs << s.computer_score << " " << s.player_score << " " << s.draw1 << " " << s.player_score1 << " " << s.player_score2 << " " << s.draw2;
+    ofs.close();
+}
+// welcome message
+void welcome_mssg()
+{
+    cout << "\n\t  ❌\033[1;33m";
+    cout << "WELCOME TO TIC TAC TOE";
+    cout << "\033[0m⭕\n";
+
+    cout << "\t  --------------------------\n"
+         << endl;
+}
+// print current player score
+void display_score1(int p1, int p2, int d)
+{
+    cout << "\n  \033[1;3mPlayer1 Win:\033[0m " << p1 << "   \033[1;3mPlayer2 Win:\033[0m " << p2 << "   \033[1;3mDraw:\033[0m " << d << "\n\n";
+}
+void display_score2(int c, int p, int d)
+{
+    cout << "\n  \033[1;3mComputer Win:\033[0m " << c << "   \033[1;3mPlayer Win:\033[0m " << p << "   \033[1;3mDraw:\033[0m " << d << "\n\n";
 }

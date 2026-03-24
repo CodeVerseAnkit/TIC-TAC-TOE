@@ -13,3 +13,27 @@ Sunday,22,March,2026  09:17:21 PM
 Exit the app:
 Sunday,22,March,2026  09:17:36 PM
 
+Played game with friend:
+Sunday,22,March,2026  09:27:59 PM
+
+Exit the app:
+Sunday,22,March,2026  09:31:05 PM
+
+Opened how to play:
+Tuesday,24,March,2026  09:52:18 PM
+
+Played game with bot:
+Tuesday,24,March,2026  09:52:35 PM
+
+Played game with friend:
+Tuesday,24,March,2026  09:52:43 PM
+
+Opened score:
+Tuesday,24,March,2026  09:53:35 PM
+
+Opened score:
+Tuesday,24,March,2026  09:54:11 PM
+
+Exit the app:
+Tuesday,24,March,2026  09:54:40 PM
+
