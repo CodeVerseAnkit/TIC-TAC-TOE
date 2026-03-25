@@ -7,3 +7,5 @@
 -> play_with_friend (), user_logs() competed 
 
 ->  score board feature added 😎
+
+-> started building play with both feature
