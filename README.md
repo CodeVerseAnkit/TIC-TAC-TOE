@@ -9,3 +9,5 @@
 ->  score board feature added 😎
 
 -> started building play with both feature
+
+-> project completed
