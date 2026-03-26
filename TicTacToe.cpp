@@ -125,7 +125,7 @@ void play_with_bot()
     loading_bar();
     welcome_mssg();
     game_score S;
-    srand(time(0));
+
     char user;
     do
     {
@@ -271,9 +271,10 @@ void play_with_friend()
             clear_screen();
             display_score1(S.player_score1, S.player_score2, S.draw2);
             print_board(space);
-            if (check_winner(space, player1, player2))
+            int result = check_winner(space, player1, player2);
+            if (result)
             {
-                check_winner(space, player1, player2) == 1 ? S.player_score1++ : S.player_score2++;
+                result == 1 ? S.player_score1++ : S.player_score2++;
                 clear_screen();
                 display_score1(S.player_score1, S.player_score2, S.draw2);
                 print_board(space);
@@ -297,9 +298,10 @@ void play_with_friend()
             clear_screen();
             display_score1(S.player_score1, S.player_score2, S.draw2);
             print_board(space);
-            if (check_winner(space, player1, player2))
+            result = check_winner(space, player1, player2);
+            if (result)
             {
-                check_winner(space, player1, player2) == 1 ? S.player_score1++ : S.player_score2++;
+                result == 1 ? S.player_score1++ : S.player_score2++;
                 clear_screen();
                 display_score1(S.player_score1, S.player_score2, S.draw2);
                 print_board(space);
@@ -373,7 +375,7 @@ void app_info()
     back_button();
 }
 // ---> 7. Exit
-void exit()
+void exit_game()
 {
     cout << "\n\t\t❤  \033[1;32m"
          << "THANKS TO PLAY"
@@ -398,6 +400,7 @@ char user_input()
 // main function
 int main()
 {
+    srand(time(0));
     char input;
     do
     {
@@ -431,7 +434,7 @@ int main()
             break;
         case '7':
             user_logs("Exit the app");
-            exit();
+            exit_game();
             break;
         default:
             cout << "  Invalid Input ";
@@ -587,7 +590,7 @@ void computer_move(vector<char> &space, char computer, char level)
     }
     // for easy
     int move;
-    srand(time(0));
+
     while (true)
     {
         move = rand() % 9;
@@ -675,7 +678,10 @@ void save_score(int cs, int ps, int d1, int ps1, int ps2, int d2)
 {
     game_score s;
     ifstream ifs("/sdcard/Coding.cpp/PROJECT/Tic Tac Toe/PlayerScore.txt");
-    ifs >> s.computer_score >> s.player_score >> s.draw1 >> s.player_score1 >> s.player_score2 >> s.draw2;
+    if (ifs.tellg() != 0)
+    {
+        ifs >> s.computer_score >> s.player_score >> s.draw1 >> s.player_score1 >> s.player_score2 >> s.draw2;
+    }
     ifs.close();
 
     s.computer_score += cs;
