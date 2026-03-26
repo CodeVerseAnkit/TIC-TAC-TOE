@@ -56,7 +56,7 @@ This project focuses on game logic, Algorithm, file handling, and an interactive
 
 1. Clone the Repository
 
-git clone https://github.com/your-username/tic-tac-toe-cpp.git
+git clone https://github.com/CodeVerseAnkit/TIC-TAC-TOE.git
 cd tic-tac-toe-cpp
 
 2. Compile the Code
