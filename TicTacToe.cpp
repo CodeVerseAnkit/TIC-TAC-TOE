@@ -36,9 +36,9 @@ void menu()
 void print_board(vector<char> &space);
 char select_symbol();
 void player_move(vector<char> &space, char player, int turn);
-void computer_move(vector<char> &space, char computer,char level);
-char select_level() ;
-    
+void player_move2(vector<char> &space, char player);
+void computer_move(vector<char> &space, char computer, char level);
+char select_level();
 
 int check_winner(vector<char> &space, char player1, char player2);
 bool check_draw(vector<char> &space);
@@ -97,7 +97,7 @@ void score()
     ifs.close();
     display_score2(s.computer_score, s.player_score, s.draw1);
     cout << "\n        ------------------------------\n        |\033[1;46m     Player1 Vs Player2     \033[0m|\n        ------------------------------\n";
-    display_score2(s.player_score1, s.player_score2, s.draw2);
+    display_score1(s.player_score1, s.player_score2, s.draw2);
     cout << "\n        ------------------------------\n        |\033[1;46m     Total Games Played     \033[0m|\n        ------------------------------\n";
     cout << "\n  \033[1;3mComputer Vs Player:\033[0m " << (s.computer_score + s.player_score + s.draw1) << "   \033[1;3mPlayer Vs Player:\033[0m " << (s.player_score1 + s.player_score2 + s.draw2) << "\n\n";
     char user;
@@ -122,8 +122,7 @@ void score()
 // ---> 3. Play With Bot
 void play_with_bot()
 {
-    
- //    loading_bar();
+    loading_bar();
     welcome_mssg();
     game_score S;
     srand(time(0));
@@ -133,16 +132,16 @@ void play_with_bot()
         vector<char> space(9, ' ');
         char player = select_symbol();
         char computer = (player == 'O') ? 'X' : 'O';
-        char level=select_level () ;
+        char level = select_level();
         string print_level;
-        if(level=='1')
-        print_level="Easy";
-        else if(level=='2')
-        print_level="Medium";
+        if (level == '1')
+            print_level = "Easy";
+        else if (level == '2')
+            print_level = "Medium";
         else
-        print_level="Hard";
-        char current_move=(rand() %2==0)?'O':'X';
-        cout << "\n  Player: " << player << "\n  computer: " <<computer<<"\n  Level: "<<print_level<<"\n  First Move: "<<(current_move==computer?"computer":"Player")<< endl
+            print_level = "Hard";
+        char current_move = (rand() % 2 == 0) ? 'O' : 'X';
+        cout << "\n  Player: " << player << "\n  computer: " << computer << "\n  Level: " << print_level << "\n  First Move: " << (current_move == computer ? "computer" : "Player") << endl
              << endl;
         loading_animation1("Loading Game");
         clear_screen();
@@ -151,7 +150,87 @@ void play_with_bot()
         print_board(space);
         while (true)
         {
-            break;
+            if (current_move == player)
+            {
+                player_move2(space, player);
+
+                clear_screen();
+
+                display_score2(S.computer_score, S.player_score, S.draw1);
+                print_board(space);
+                current_move = player == 'X' ? 'O' : 'X';
+                int result = check_winner(space, player, computer);
+                if (result == 1)
+                {
+                    S.player_score++;
+                    clear_screen();
+
+                    display_score2(S.computer_score, S.player_score, S.draw1);
+                    print_board(space);
+                    cout << "\n  You win🥳, nice played🙌" << endl;
+                    break;
+                }
+                else if (result == 2)
+                {
+                    S.computer_score++;
+                    clear_screen();
+
+                    display_score2(S.computer_score, S.player_score, S.draw1);
+                    print_board(space);
+                    cout << "\n  Computer win😈,Better luck next time 👍" << endl;
+                    break;
+                }
+                if (check_draw(space))
+                {
+                    S.draw1++;
+                    clear_screen();
+
+                    display_score2(S.computer_score, S.player_score, S.draw1);
+                    print_board(space);
+                    cout << "\n  It's a draw🤝" << endl;
+                    break;
+                }
+            }
+            else
+            {
+                computer_move(space, computer, level);
+                clear_screen();
+
+                display_score2(S.computer_score, S.player_score, S.draw1);
+                print_board(space);
+                current_move = computer == 'X' ? 'O' : 'X';
+                int result = check_winner(space, player, computer);
+                if (result == 1)
+                {
+                    S.player_score++;
+                    clear_screen();
+
+                    display_score2(S.computer_score, S.player_score, S.draw1);
+                    print_board(space);
+                    cout << "\n  You win🥳, nice played🙌" << endl;
+                    break;
+                }
+                else if (result == 2)
+                {
+                    S.computer_score++;
+                    clear_screen();
+
+                    display_score2(S.computer_score, S.player_score, S.draw1);
+                    print_board(space);
+                    cout << "\n  Computer win😈,Better luck next time 👍" << endl;
+                    break;
+                }
+                if (check_draw(space))
+                {
+                    S.draw1++;
+                    clear_screen();
+
+                    display_score2(S.computer_score, S.player_score, S.draw1);
+                    print_board(space);
+                    cout << "\n  It's a draw🤝" << endl;
+                    break;
+                }
+            }
         }
         while (true)
         {
@@ -162,8 +241,8 @@ void play_with_bot()
         }
     } while (tolower(user) != 'n');
     cout << "\n  \033[1;4mFinal Score\033[0m:- \n";
-    display_score1(S.player_score1, S.player_score2, S.draw2);
-    save_score(0, 0, 0, S.player_score1, S.player_score2, S.draw2);
+    display_score2(S.computer_score, S.player_score, S.draw1);
+    save_score(S.computer_score, S.player_score, S.draw1, 0, 0, 0);
     back_button();
 }
 // ---> 4. Play With Friend
@@ -193,22 +272,24 @@ void play_with_friend()
             display_score1(S.player_score1, S.player_score2, S.draw2);
             print_board(space);
             if (check_winner(space, player1, player2))
-            {  check_winner(space, player1, player2) == 1 ? S.player_score1++ : S.player_score2++;
-             clear_screen();
-            display_score1(S.player_score1, S.player_score2, S.draw2);
-            print_board(space);
+            {
+                check_winner(space, player1, player2) == 1 ? S.player_score1++ : S.player_score2++;
+                clear_screen();
+                display_score1(S.player_score1, S.player_score2, S.draw2);
+                print_board(space);
                 string mssg = check_winner(space, player1, player2) == 1 ? "Player1 Win🥳🥳" : "Player2 Win🥳🥳";
                 cout << "\n\n  " << mssg << endl;
-              
+
                 break;
             }
             if (check_draw(space))
-            { S.draw2++;
-             clear_screen();
-            display_score1(S.player_score1, S.player_score2, S.draw2);
-            print_board(space);
+            {
+                S.draw2++;
+                clear_screen();
+                display_score1(S.player_score1, S.player_score2, S.draw2);
+                print_board(space);
                 cout << "\n\n  It's a draw⭕❌" << endl;
-               
+
                 break;
             }
             cout << "\n\n";
@@ -217,22 +298,24 @@ void play_with_friend()
             display_score1(S.player_score1, S.player_score2, S.draw2);
             print_board(space);
             if (check_winner(space, player1, player2))
-            {check_winner(space, player1, player2) == 1 ? S.player_score1++ : S.player_score2++;
-             clear_screen();
-            display_score1(S.player_score1, S.player_score2, S.draw2);
-            print_board(space);
+            {
+                check_winner(space, player1, player2) == 1 ? S.player_score1++ : S.player_score2++;
+                clear_screen();
+                display_score1(S.player_score1, S.player_score2, S.draw2);
+                print_board(space);
                 string mssg = check_winner(space, player1, player2) == 1 ? "Player1 Win🥳🥳" : "Player2 Win🥳🥳";
                 cout << "\n\n  " << mssg << endl;
-                
+
                 break;
             }
             if (check_draw(space))
-            { S.draw2++;
-             clear_screen();
-            display_score1(S.player_score1, S.player_score2, S.draw2);
-            print_board(space);
+            {
+                S.draw2++;
+                clear_screen();
+                display_score1(S.player_score1, S.player_score2, S.draw2);
+                print_board(space);
                 cout << "\n\n  It's a draw⭕❌" << endl;
-               
+
                 break;
             }
         }
@@ -315,11 +398,7 @@ char user_input()
 // main function
 int main()
 {
-     // play_with_friend();
-    //score() ;
-  //  select_level() ;
-  play_with_bot() ;
-  /* char input;
+    char input;
     do
     {
         menu();
@@ -364,7 +443,7 @@ int main()
             clear_screen();
         }
     } while (input != '7');
-*/
+
     return 0;
 }
 // print_board()
@@ -404,59 +483,116 @@ void player_move(vector<char> &space, char player, int turn)
             cout << "  Invalid move!! \n";
     }
 }
+// player_move()
+void player_move2(vector<char> &space, char player)
+{
+    // auto move when only one space is empty
+    int count = 0, idx;
+    for (int i = 0; i < 9; i++)
+    {
+        if (space[i] == ' ')
+        {
+            count++;
+            idx = i;
+        }
+    }
+    if (count == 1)
+    {
+        space[idx] = player;
+        return;
+    }
+    // normal move
+    int move;
+    while (true)
+    {
+        cout << "\n  Your turn: ";
+        cin >> move;
+        move--;
+        if (move >= 0 && move < 9 && space[move] == ' ')
+        {
+            space[move] = player;
+            break;
+        }
+        else
+            cout << "  Invalid move!! \n";
+    }
+}
 // computer_move()
-void computer_move(vector<char> &space, char computer,char level)
+void computer_move(vector<char> &space, char computer, char level)
 { // for level 2
-    if(level=='2'){
-      // check for winning move
-      for(int i=0;i<9;i++) {
-      if(space[i]==' '){
-        space[i]=computer;
-        char player=computer=='X'? 'O':'X';
-        if(check_winner (space,player, computer)==2)
-        return;
-        else
-        space[i]=' ';
-            }  
-      }
-      // check for block opponent
-       for(int i=0;i<9;i++) {
-      if(space[i]==' '){
-        space[i]=computer;
-        char player=computer=='X'? 'O':'X';
-        if(check_winner (space,player, computer)==1)
-        return;
-        else
-        space[i]=' ';
-            }  
-      }
+    if (level == '2' || level == '3')
+    {
+        char player = computer == 'X' ? 'O' : 'X';
+        // check for winning move
+        for (int i = 0; i < 9; i++)
+        {
+            if (space[i] == ' ')
+            {
+                space[i] = computer;
+
+                if (check_winner(space, player, computer) == 2)
+                    return;
+
+                space[i] = ' ';
+            }
+        }
+        // check for block opponent
+        for (int i = 0; i < 9; i++)
+        {
+            if (space[i] == ' ')
+            {
+                space[i] = player;
+
+                if (check_winner(space, player, computer) == 1)
+                {
+                    space[i] = computer;
+                    return;
+                }
+
+                space[i] = ' ';
+            }
+        }
     }
     // for level 3
- if(level=='3'){
-     // play in middle
- if(space[4]==' ') 
- space[4]=computer;
- 
- // play in corner
-else if(space[0]==' ')
-space[0]=computer;
-else if(space[2]==' ')
-space[2]=computer;
-else if(space[6]==' ')
-space[6]=computer;
-else if(space[8]==' ')
-space [8]=computer;
-return;
+    if (level == '3')
+    {
+        // play in middle
+        if (space[4] == ' ')
+        {
+            space[4] = computer;
+            return;
+        }
 
- }
- // for easy 
+        // play in corner
+        if (space[0] == ' ')
+        {
+            space[0] = computer;
+            return;
+        }
+        if (space[2] == ' ')
+        {
+            space[2] = computer;
+            return;
+        }
+        if (space[6] == ' ')
+        {
+            space[6] = computer;
+            return;
+        }
+        if (space[8] == ' ')
+        {
+            space[8] = computer;
+            return;
+        }
+    }
+    // for easy
     int move;
     srand(time(0));
     while (true)
     {
-        move = rand() % 9 ;
-        
-        if ( space[move] == ' ')
+        move = rand() % 9;
+
+        if (space[move] == ' ')
         {
             space[move] = computer;
             return;
@@ -464,16 +600,23 @@ return;
     }
 }
 // select level
-char select_level() {
-char level;
-cout<<"   \033[1;4mGame Levels\033[0m:-\n"<<endl;
-cout<<"     1.\033[1;32mEasy\033[0m";cout<<"     2.\033[1;33mMedium\033[0m";cout<<"     3.\033[1;31mHard\033[0m\n"<<endl;
-while(true){
-   cout<<"  Select Level: ";
-   cin>>level;
-   if(level=='1'||level=='2'||level=='3') break;
-       } 
-       return level;  
+char select_level()
+{
+    char level;
+    cout << "   \033[1;4mGame Levels\033[0m:-\n"
+         << endl;
+    cout << "     1.\033[1;32mEasy\033[0m";
+    cout << "     2.\033[1;33mMedium\033[0m";
+    cout << "     3.\033[1;31mHard\033[0m\n"
+         << endl;
+    while (true)
+    {
+        cout << "  Select Level: ";
+        cin >> level;
+        if (level == '1' || level == '2' || level == '3')
+            break;
+    }
+    return level;
 }
 
 // check_winner()
