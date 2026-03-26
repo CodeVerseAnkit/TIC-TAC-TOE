@@ -98,9 +98,13 @@ g++ main.cpp -o game
 📷 Sample Screenshots
 
 https://github.com/CodeVerseAnkit/TIC-TAC-TOE/blob/main/Example1.jpg
+
 https://github.com/CodeVerseAnkit/TIC-TAC-TOE/blob/main/Example2.jpg
+
 https://github.com/CodeVerseAnkit/TIC-TAC-TOE/blob/main/Example3.jpg
+
 https://github.com/CodeVerseAnkit/TIC-TAC-TOE/blob/main/Example4.jpg
+
 
 ---
 
